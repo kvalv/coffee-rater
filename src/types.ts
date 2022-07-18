@@ -198,6 +198,96 @@ export interface paths {
       };
     };
   };
+  "/profile": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.profile.id"];
+          name?: parameters["rowFilter.profile.name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["profile"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** profile */
+          profile?: definitions["profile"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.profile.id"];
+          name?: parameters["rowFilter.profile.name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.profile.id"];
+          name?: parameters["rowFilter.profile.name"];
+        };
+        body: {
+          /** profile */
+          profile?: definitions["profile"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/rating": {
     get: {
       parameters: {
@@ -210,7 +300,7 @@ export interface paths {
           with_milk?: parameters["rowFilter.rating.with_milk"];
           date?: parameters["rowFilter.rating.date"];
           coffee_id?: parameters["rowFilter.rating.coffee_id"];
-          user_id?: parameters["rowFilter.rating.user_id"];
+          profile_id?: parameters["rowFilter.rating.profile_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -269,7 +359,7 @@ export interface paths {
           with_milk?: parameters["rowFilter.rating.with_milk"];
           date?: parameters["rowFilter.rating.date"];
           coffee_id?: parameters["rowFilter.rating.coffee_id"];
-          user_id?: parameters["rowFilter.rating.user_id"];
+          profile_id?: parameters["rowFilter.rating.profile_id"];
         };
         header: {
           /** Preference */
@@ -292,7 +382,7 @@ export interface paths {
           with_milk?: parameters["rowFilter.rating.with_milk"];
           date?: parameters["rowFilter.rating.date"];
           coffee_id?: parameters["rowFilter.rating.coffee_id"];
-          user_id?: parameters["rowFilter.rating.user_id"];
+          profile_id?: parameters["rowFilter.rating.profile_id"];
         };
         body: {
           /** rating */
@@ -306,6 +396,28 @@ export interface paths {
       responses: {
         /** No Content */
         204: never;
+      };
+    };
+  };
+  "/rpc/get_film_count": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            len_to: number;
+            /** Format: integer */
+            len_from: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
       };
     };
   };
@@ -344,6 +456,16 @@ export interface definitions {
      */
     date?: string;
   };
+  profile: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /** Format: text */
+    name?: string;
+  };
   rating: {
     /** Format: numeric */
     rating: number;
@@ -373,8 +495,9 @@ export interface definitions {
      * Format: uuid
      * @description Note:
      * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `profile.id`.<fk table='profile' column='id'/>
      */
-    user_id: string;
+    profile_id: string;
   };
 }
 
@@ -427,6 +550,12 @@ export interface parameters {
   "rowFilter.coffee.image": string;
   /** Format: timestamp with time zone */
   "rowFilter.coffee.date": string;
+  /** @description profile */
+  "body.profile": definitions["profile"];
+  /** Format: uuid */
+  "rowFilter.profile.id": string;
+  /** Format: text */
+  "rowFilter.profile.name": string;
   /** @description rating */
   "body.rating": definitions["rating"];
   /** Format: numeric */
@@ -446,7 +575,7 @@ export interface parameters {
   /** Format: uuid */
   "rowFilter.rating.coffee_id": string;
   /** Format: uuid */
-  "rowFilter.rating.user_id": string;
+  "rowFilter.rating.profile_id": string;
 }
 
 export interface operations {}

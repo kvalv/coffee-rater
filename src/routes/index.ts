@@ -1,7 +1,7 @@
 import db from '$lib/db';
 import type { definitions } from 'src/types';
 
-export type coffeeJoinRating = definitions['coffee'] & { rating: definitions['rating'][] }
+export type coffeeJoinRating = definitions['coffee'] & { rating: definitions['rating'] & {profile: { name: string }}}[]
 
 
 /** @type {import('./__types/index').RequestHandler} */
@@ -14,9 +14,11 @@ export async function get() {
         image,
         date,
         rating (
-            *
+            *,
+            profile (name)
         )
     `)
+    console.log(JSON.stringify(x))
 
     if (x.error != null) {
         console.log('unable to query data; ', x)
