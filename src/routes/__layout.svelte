@@ -45,7 +45,7 @@
             </form>
         {:else}
             <div class="flex gap-1">
-                <div>{$name || "unknown user"}</div>
+                <div>{$name || ($user.user_metadata.name || "unknown user")}</div>
                 <div on:click={signout}>
                     <Icon src={Logout} class="text-gray-400 h-6" />
                 </div>
