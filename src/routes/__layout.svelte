@@ -1,23 +1,39 @@
 <script>
     import "../app.css";
-    import { user } from "$lib/stores";
+    import { name, user } from "$lib/stores";
     import supabase from "$lib/db";
     import Navbar from "../Navbar.svelte";
     import Notifications from "svelte-notifications";
+    import { SvelteToast } from "@zerodevx/svelte-toast";
 
     $user = supabase.auth.user();
-    supabase.auth.onAuthStateChange((x, session) => {
+    let sub = supabase.auth.onAuthStateChange(async (x, session) => {
         $user = session?.user || null;
-        // console.log("received onAuthStateChange -- set user to ", x, $user);
-    });
+        if ($user == null) return;
+        let { data, error } = await supabase
+            .from("profile")
+            .select("name")
+            .match({ id: $user?.id });
+        console.log('got data...', data)
+        if (error) {
+            console.log("got error when trying to fetch profile data", error);
+        } else {
+            if (Array.isArray(data)) {
+                $name = data[0].name;
+            } else {
+                $name = data.name
+            }
+        }
+    }).data;
 </script>
 
+<SvelteToast />
 <div class="bg-c4 min-h-screen py-0 my-0 mx-auto">
-<Notifications>
+    <!-- <Notifications> -->
     <Navbar username={$user?.email} />
 
     <div class="">
         <slot />
     </div>
-</Notifications>
-        </div>
+    <!-- </Notifications> -->
+</div>

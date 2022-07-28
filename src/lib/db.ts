@@ -15,3 +15,23 @@ const supabase = createClient(
 );
 
 export default supabase
+
+export function getPublicUrlForBlob(p: string | null) {
+        if (p == null) {
+        return
+    }
+
+        if (p.endsWith('.blob')) {
+            if (p.startsWith('images/')) {
+                // for some reason, it adds images to the url which gives a 404...
+                p = p.replace(/^images/, '')
+            }
+            let r =  supabase.storage.from('images').getPublicUrl(p)
+            if (r.error != null) {
+                console.error(r.error)
+                return undefined
+            }
+            // return "https://nkcfpjmzqpbdlmseyilr.supabase.co/storage/v1/object/public/images/public/d92fb7d7-ba57-434a-8f1a-ad948062aab6.blob"
+            return r?.data?.publicURL
+        }
+}

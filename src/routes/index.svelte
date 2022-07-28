@@ -1,14 +1,13 @@
 <script lang="ts">
     import { user } from "$lib/stores";
-    import { getNotificationsContext } from "svelte-notifications";
-    import Modal from "../Modal.svelte";
+    import Modal from "$lib/Modal.svelte";
     import type { definitions } from "src/types";
     import { chain } from "underscore";
     import Rating from "$lib/Rating.svelte";
     import Card from "../Card.svelte";
     import { PlusCircle } from "@steeze-ui/heroicons";
     import { Icon } from "@steeze-ui/svelte-icon";
-    import NewCoffee from "../NewCoffee.svelte"
+    import NewCoffee from "../NewCoffee.svelte";
     type coffeeJoinRating = definitions["coffee"] &
         { rating: definitions["rating"] & { profile: { name: string } } }[];
 
@@ -29,7 +28,6 @@
 
     function cardfields_for_coffee(c: any) {
         let badge_text;
-        console.log("c is...", c);
         if (c.rating.length > 0) {
             let avg_rating =
                 chain(c.rating)
@@ -56,23 +54,14 @@
         let user_rating = tx(
             chain(c.rating)
                 .find((r) => {
-                    console.log(
-                        "checking r",
-                        r,
-                        r.profile_id == $user?.id,
-                        "with user=",
-                        $user
-                    );
                     return r.profile_id == $user?.id;
                 })
                 .value()
         );
-        console.log("here user rating is...", user_rating);
         return {
             id: c.id,
             title: c.name,
             subtitle: c.producer,
-            support_text: "great coffee!",
             badge: { text: badge_text },
             media: c.image,
             user_rating: user_rating,
@@ -86,6 +75,10 @@
     let selected_coffee: definitions["coffee"] = coffees[0];
     $: selected_existing_ratings = ratingsForCoffee(selected_coffee);
 </script>
+
+<svelte:head>
+    <title>hello</title>
+</svelte:head>
 
 <div class="mt-8 flex flex-wrap gap-8 justify-center items-start lex-none">
     {#each coffees as c}
@@ -110,7 +103,7 @@
 </div>
 
 <Modal bind:this={addCoffeeModal} closeOnClickOutside={true}>
-    <NewCoffee on:coffeeAdded={addCoffeeModal.close}/>
+    <NewCoffee on:coffeeAdded={addCoffeeModal.close} />
 </Modal>
 
 <Modal bind:this={addRatingModal} closeOnClickOutside={true}>

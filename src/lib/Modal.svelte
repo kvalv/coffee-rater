@@ -42,7 +42,7 @@
 <!--modal content-->
 <div
 
-    class="fixed z-[9999999] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+    class="fixed inset-0 z-[9999999] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
     use:clickOutside
     on:outclick={() => {
         if (closeOnClickOutside) {

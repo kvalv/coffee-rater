@@ -8,12 +8,12 @@ const config = {
             postcss: true,
         }),
     ],
-	kit: {
-		adapter: adapter(),
+    kit: {
+        adapter: adapter(),
         alias: {
             $types: 'src/types'
-    }
-	}
+        }
+    },
 };
 
 export default config;

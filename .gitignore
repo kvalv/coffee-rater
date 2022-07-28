@@ -8,3 +8,6 @@ node_modules
 !.env.example
 tags
 .vercel
+/test-results/
+/playwright-report/
+/playwright/.cache/

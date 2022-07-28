@@ -2,12 +2,12 @@
     import supabase from "$lib/db";
     import { Camera } from "@steeze-ui/heroicons";
     import { Icon } from "@steeze-ui/svelte-icon";
-    import CameraComp from "./Camera.svelte";
+    import CameraComp from "$lib/Camera.svelte";
     import { v4 as uuidv4 } from "uuid";
 
     import { notify } from "$lib/notify";
     import { createEventDispatcher } from "svelte";
-    import Modal from "./Modal.svelte";
+    import Modal from "$lib/Modal.svelte";
     let dispatch = createEventDispatcher();
 
     let name: string;
@@ -66,6 +66,7 @@
                 if (resp.error == null) {
                     dispatch("coffeeAdded", {});
                     notify("added coffee. Please refresh :o", "success", 4000);
+                    notify("added coffee")
                 } else {
                     notify(
                         `Unable to add coffee. Reason: '${resp.error.message}'`,
@@ -93,7 +94,9 @@
             image = r?.data?.Key;
             if (image == undefined) {
                 console.error("expected image to be set, but it is not");
+                return;
             }
+            supabase.storage.from("images").getPublicUrl(image)
 
             // let blob = e.detail.blob
         }}

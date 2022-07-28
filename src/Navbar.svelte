@@ -1,11 +1,30 @@
 <script lang="ts">
-    export let username: string | null;
-    import SignOut from "./SignOut.svelte";
+import { goto } from "$app/navigation";
 
-    $: txt = username && `signed in as ${username}` || "not logged in";
+    import supabase from "$lib/db";
+import { notify } from "$lib/notify";
+
+    import { user, name } from "$lib/stores";
+
+    export let username: string | null;
+
+    $: txt = (username && `signed in as ${$name}`) || "not logged in";
+    async function signout() {
+        let {error} = await supabase.auth.signOut();
+        if (error) {
+            console.error(error)
+            notify(error.message, "danger")
+        } else {
+            notify("you signed out", "success")
+            goto("/")
+        }
+
+    }
 </script>
 
-<nav class="bg-c1 text-c4 border-gray-200 px-2 pb-4 dark:bg-gray-800 overflow-hidden">
+<nav
+    class="bg-c1 text-c4 border-gray-200 px-2 pb-4 dark:bg-gray-800 overflow-hidden"
+>
     <div
         class="container flex flex-row flex-none flex-nowrap justify-between items-center mx-auto"
     >
@@ -19,7 +38,24 @@
             <p class="block py-2 pr-4 pl-3 ">{txt}</p>
         </div>
         <div class="justify-self-end">
-            <SignOut />
+            {#if !$user}
+                <form method="get" action="/login">
+                    <input
+                        type="submit"
+                        class="bg-c2 text-white py-1 px-1 rounded-sm"
+                        value="sign in"
+                    />
+                </form>
+            {:else}
+                <button
+                    on:click={signout}
+                    class="bg-c2 text-white py-1 px-1 rounded-sm"
+                >
+                    <p>sign out</p>
+                </button>
+            {/if}
+
+            <!-- <SignOut /> -->
         </div>
     </div>
 </nav>

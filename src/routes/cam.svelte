@@ -1,5 +1,5 @@
 <script>
-import Camera from "../Camera.svelte";
+import Camera from "$lib/Camera.svelte";
 
     let videoSource = null;
     let loading = false;

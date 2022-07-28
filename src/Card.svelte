@@ -39,7 +39,7 @@
     import { Icon } from "@steeze-ui/svelte-icon";
     import { ChevronDown, Plus } from "@steeze-ui/heroicons";
     import { createEventDispatcher } from "svelte";
-    import { formatDistance } from "date-fns";
+    import {formatDistance} from "date-fns";
 import supabase from "$lib/db";
 
     interface Rating {
@@ -92,29 +92,31 @@ import supabase from "$lib/db";
             <p class="text-gray-500 italic">{subtitle}</p>
         </div>
 
-        <div
-            class="flex flex-col my-2 gap-2 items-center place-content-between"
-        >
-            <div class="p-4 text-center">
-                <p>{support_text}</p>
-            </div>
-            <button class="border-c2 max-w-[8rem] rounded-lg px-2 border-2">
-                {#if user_rating == null}
-                    <!-- add rating -->
-                    <button on:click={() => dispatch("rateclick", {})} class="">
-                        <div
-                            class="flex align justify-start items-center align-middle"
-                        >
-                            <Icon src={Plus} class="text-c2 grow-0 h-4" />
-                            <p>rate</p>
-                        </div>
-                    </button>
-                {:else}
-                    you rated {user_rating.value.toFixed(2)}
-                {/if}
-            </button>
-        </div>
+        <!-- <div -->
+        <!--     class="flex flex-col my-2 gap-2 items-center place-content-between" -->
+        <!-- > -->
+        <!--     <button class="border-c2 max-w-[8rem] rounded-lg px-2 border-2"> -->
+        <!--         {#if user_rating == null} -->
+        <!--             <!-1- add rating -1-> -->
+        <!--             <button on:click={() => dispatch("rateclick", {})} class=""> -->
+        <!--                 <div -->
+        <!--                     class="flex align justify-start items-center align-middle" -->
+        <!--                 > -->
+        <!--                     <Icon src={Plus} class="text-c2 grow-0 h-4" /> -->
+        <!--                     <p>rate</p> -->
+        <!--                 </div> -->
+        <!--             </button> -->
+        <!--         {:else} -->
+        <!--             you rated {user_rating.value.toFixed(2)} -->
+        <!--         {/if} -->
+        <!--     </button> -->
+        <!-- </div> -->
+
     </div>
+
+    <div class="w-[100%] border-gray-200 border" />
+    <!-- horizontal ruler -->
+
 
     <!-- ratings -->
     <div class="border-t-gray-200 border-t-2">
