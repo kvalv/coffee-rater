@@ -44,7 +44,7 @@
             .from("coffee")
             .delete()
             .match({ id: $page.params.id });
-        goto('/')
+        goto("/");
         if (res.error) {
             notify(res.error.message, "danger");
         } else {
@@ -75,12 +75,14 @@
             <p class="font-bold text-lg tracking-wider">{name}</p>
             <p class="font-thin text-lg tracking-wider">{producer}</p>
         </div>
-        <div
-            class="self-center mr-2"
-            on:click={async () => await delete_coffee()}
-        >
-            <Icon src={Trash} class="h-8 text-gray-400" />
-        </div>
+        {#if profile_id == $user?.id}
+            <div
+                class="self-center mr-2"
+                on:click={async () => await delete_coffee()}
+            >
+                <Icon src={Trash} class="h-8 text-gray-400" />
+            </div>
+        {/if}
     </div>
 
     <button
