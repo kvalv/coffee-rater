@@ -1,10 +1,10 @@
 <script>
     import "../app.css";
     import { name, user } from "$lib/stores";
-    import supabase from "$lib/db";
-    import Navbar from "../Navbar.svelte";
-    import Notifications from "svelte-notifications";
+    import supabase, { signout } from "$lib/db";
     import { SvelteToast } from "@zerodevx/svelte-toast";
+    import { Icon } from "@steeze-ui/svelte-icon";
+    import { Logout } from "@steeze-ui/heroicons";
 
     $user = supabase.auth.user();
     let sub = supabase.auth.onAuthStateChange(async (x, session) => {
@@ -14,14 +14,13 @@
             .from("profile")
             .select("name")
             .match({ id: $user?.id });
-        console.log('got data...', data)
         if (error) {
             console.log("got error when trying to fetch profile data", error);
         } else {
             if (Array.isArray(data)) {
                 $name = data[0].name;
             } else {
-                $name = data.name
+                $name = data.name;
             }
         }
     }).data;
@@ -30,7 +29,28 @@
 <SvelteToast />
 <div class="bg-c4 min-h-screen py-0 my-0 mx-auto">
     <!-- <Notifications> -->
-    <Navbar username={$user?.email} />
+    <nav
+        class="bg-c1 px-2 h-12 flex text-white flex-row flex-none flex-nowrap justify-between items-center"
+    >
+        <a href="/">Bula Coffee Rater Club</a>
+
+        {#if !$user}
+            <form method="get" action="/login">
+                <input
+                    type="submit"
+                    class="bg-c2 text-white py-1 px-1 rounded-sm"
+                    value="log in"
+                />
+            </form>
+        {:else}
+            <div class="flex gap-1">
+                <div>{$name}</div>
+                <div on:click={signout}>
+                    <Icon src={Logout} class="text-gray-400 h-6" />
+                </div>
+            </div>
+        {/if}
+    </nav>
 
     <div class="">
         <slot />

@@ -9,7 +9,9 @@
     let password: string;
 
     let register: boolean = false;
-    $: disabled = register ? (email == null || name == null || name == "" || email == "") : (email == null || email == "")
+    $: disabled = register
+        ? email == null || name == null || name == "" || email == ""
+        : email == null || email == "";
 
     async function submit() {
         // let res = await supabase.from('public.auth.users').select('1').match({email})
@@ -48,7 +50,7 @@
     }
 </script>
 
-<div class="flex flex-col p-4 bg-white mx-4  gap-y-4">
+<div class="flex flex-col p-4 bg-white mx-4  gap-y-8">
     <div class="flex flex-row shrink-0 text-center justify-evenly ">
         <div
             on:click={() => {
@@ -58,7 +60,7 @@
             }}
             class="bg-gray-200 border border-gray-500 w-[100%]"
         >
-            Sign in
+            Log in
         </div>
         <div
             on:click={() => {
@@ -72,8 +74,8 @@
         </div>
     </div>
 
-    <form class="flex flex-col gap-2 ">
-        <label name="email" class="flex flex-row justify-start gap-4 px-8">
+    <form class="flex flex-col gap-4 ">
+        <label name="email" class="flex flex-row flex-wrap justify-start gap-x-4 px-8">
             <input
                 bind:value={email}
                 type="email"
@@ -85,7 +87,7 @@
         </label>
 
         {#if register}
-            <label name="name" class="flex flex-row justify-start gap-4 px-8">
+            <label name="name" class="flex flex-row flex-wrap justify-start gap-x-4 px-8">
                 <input
                     bind:value={name}
                     type="text"
@@ -96,7 +98,10 @@
             </label>
         {/if}
 
-        <label name="password" class="flex flex-row justify-start gap-4 px-8">
+        <label
+            name="password"
+            class="flex flex-row flex-wrap justify-start gap-x-4 px-8"
+        >
             <input
                 bind:value={password}
                 type="password"
