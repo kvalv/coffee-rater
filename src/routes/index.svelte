@@ -56,7 +56,7 @@
 </script>
 
 <svelte:head>
-    <title>hello</title>
+    <title>Bula Coffee Rater Club</title>
 </svelte:head>
 
 <div class="mt-8 flex flex-wrap gap-8 justify-center items-start lex-none">
