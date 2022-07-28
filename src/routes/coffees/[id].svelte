@@ -7,10 +7,10 @@
     import supabase from "$lib/db";
     import { notify } from "$lib/notify";
     import { user } from "$lib/stores";
+    import { capitalize } from "$lib/utils";
     import { Trash } from "@steeze-ui/heroicons";
     import { Icon } from "@steeze-ui/svelte-icon";
     import { formatDistance } from "date-fns";
-    import { capitalize } from "underscore.string";
 
     export let error;
     if (error) {

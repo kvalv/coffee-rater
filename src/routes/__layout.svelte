@@ -5,7 +5,7 @@
     import { SvelteToast } from "@zerodevx/svelte-toast";
     import { Icon } from "@steeze-ui/svelte-icon";
     import { Logout } from "@steeze-ui/heroicons";
-    import capitalize from "underscore.string/capitalize";
+    import { capitalize } from "$lib/utils";
 
     $user = supabase.auth.user();
     let sub = supabase.auth.onAuthStateChange(async (x, session) => {
