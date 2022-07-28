@@ -8,16 +8,20 @@
     import { PlusCircle } from "@steeze-ui/heroicons";
     import { Icon } from "@steeze-ui/svelte-icon";
     import NewCoffee from "../NewCoffee.svelte";
-    type coffeeJoinRating = definitions["coffee"] &
-        { rating: definitions["rating"] & { profile: { name: string } } }[];
+    import supabase from "$lib/db";
+    // type coffeeJoinRating = definitions["coffee"] &
+    //     { rating: definitions["rating"] & { profile: { name: string } } }[];
 
-    export let coffees: coffeeJoinRating[];
+    type coffeeData = {id: string, name: string, s: number, producer: string, image: string}
+    export let coffees: coffeeData[]
+    // export let coffees: coffeeJoinRating[];
     let ratings = chain(coffees)
         .map((c) => c.rating)
         .flatten()
         .value();
 
     console.log("user is", $user);
+    supabase.rpc("fetch_cardinfo").then(console.log);
 
     let addRatingModal: Modal;
     let addCoffeeModal: Modal;
@@ -26,49 +30,24 @@
         return chain(ratings).where({ coffee_id: c.id }).value();
     }
 
-    function cardfields_for_coffee(c: any) {
-        let badge_text;
-        if (c.rating.length > 0) {
-            let avg_rating =
-                chain(c.rating)
-                    .reduce((acc, r) => acc + r.rating, 0)
-                    .value() / c.rating.length;
-            badge_text = avg_rating.toFixed(2);
-        } else {
-            badge_text = "unrated";
-        }
+    function cardfields_for_coffee(c: coffeeData) {
+        // let badge_text;
+        // if (c.rating.length > 0) {
+        //     let avg_rating =
+        //         chain(c.rating)
+        //             .reduce((acc, r) => acc + r.rating, 0)
+        //             .value() / c.rating.length;
+        //     badge_text = avg_rating.toFixed(2);
+        // } else {
+        //     badge_text = "unrated";
+        // }
 
-        // transform_rating = (r) => ({ name: r.profile.name, value: r.rating, at: new Date(r.date)})
-        // let my_rating = transform_rating(chain(c.rating).find(r => r.user_id == $user?.id);
-        let tx = (r: any) => {
-            if (r == null) {
-                return null;
-            }
-            return {
-                name: r.profile?.name,
-                value: r.rating,
-                at: new Date(r.date),
-            };
-        };
-
-        let user_rating = tx(
-            chain(c.rating)
-                .find((r) => {
-                    return r.profile_id == $user?.id;
-                })
-                .value()
-        );
         return {
             id: c.id,
             title: c.name,
             subtitle: c.producer,
-            badge: { text: badge_text },
+            badge: { text: c.s ?  c.s.toFixed(2) : "?"},
             media: c.image,
-            user_rating: user_rating,
-            deletable: true,
-            ratings: chain(c.rating)
-                .map((r) => tx(r))
-                .value(),
         };
     }
 

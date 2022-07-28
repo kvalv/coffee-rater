@@ -3,14 +3,7 @@
     export let title: string;
     export let subtitle: string | undefined;
     export let media: string = "https://picsum.photos/200/300";
-    export let support_text: string;
-    export let actions: Action[] = [];
     export let badge: Badge | null = null;
-    export let ratings: Rating[] = [];
-    export let deletable: boolean;
-    import { notify } from "$lib/notify";
-
-    export let user_rating: Rating | null;
 
     let defaultImage =
         "https://picmamba.com/wp-content/uploads/2017/12/black-white-coffee.jpg";
@@ -19,34 +12,24 @@
         if (media == null) {
             return defaultImage;
         }
-        if (media.endsWith('.blob')) {
-            if (media.startsWith('images/')) {
+        if (media.endsWith(".blob")) {
+            if (media.startsWith("images/")) {
                 // for some reason, it adds images to the url which gives a 404...
-                media = media.replace(/^images/, '')
+                media = media.replace(/^images/, "");
             }
-            let r =  supabase.storage.from('images').getPublicUrl(media)
+            let r = supabase.storage.from("images").getPublicUrl(media);
             if (r.error != null) {
-                console.error(r.error)
-                return defaultImage
+                console.error(r.error);
+                return defaultImage;
             }
-            console.log(media, 'blob!', r.data.publicURL)
+            console.log(media, "blob!", r.data.publicURL);
             // return "https://nkcfpjmzqpbdlmseyilr.supabase.co/storage/v1/object/public/images/public/d92fb7d7-ba57-434a-8f1a-ad948062aab6.blob"
-            return r.data.publicURL
+            return r.data.publicURL;
         }
         return media;
-    })()
+    })();
 
-    import { Icon } from "@steeze-ui/svelte-icon";
-    import { ChevronDown, Plus } from "@steeze-ui/heroicons";
-    import { createEventDispatcher } from "svelte";
-    import {formatDistance} from "date-fns";
-import supabase from "$lib/db";
-
-    interface Rating {
-        name: string;
-        value: number;
-        at: Date;
-    }
+    import supabase from "$lib/db";
 
     interface Badge {
         text: string;
@@ -57,7 +40,6 @@ import supabase from "$lib/db";
         onClick: () => void;
     }
 
-    const dispatch = createEventDispatcher();
 </script>
 
 <!-- card container -->
@@ -91,68 +73,8 @@ import supabase from "$lib/db";
             </p>
             <p class="text-gray-500 italic">{subtitle}</p>
         </div>
-
-        <!-- <div -->
-        <!--     class="flex flex-col my-2 gap-2 items-center place-content-between" -->
-        <!-- > -->
-        <!--     <button class="border-c2 max-w-[8rem] rounded-lg px-2 border-2"> -->
-        <!--         {#if user_rating == null} -->
-        <!--             <!-1- add rating -1-> -->
-        <!--             <button on:click={() => dispatch("rateclick", {})} class=""> -->
-        <!--                 <div -->
-        <!--                     class="flex align justify-start items-center align-middle" -->
-        <!--                 > -->
-        <!--                     <Icon src={Plus} class="text-c2 grow-0 h-4" /> -->
-        <!--                     <p>rate</p> -->
-        <!--                 </div> -->
-        <!--             </button> -->
-        <!--         {:else} -->
-        <!--             you rated {user_rating.value.toFixed(2)} -->
-        <!--         {/if} -->
-        <!--     </button> -->
-        <!-- </div> -->
-
     </div>
 
     <div class="w-[100%] border-gray-200 border" />
     <!-- horizontal ruler -->
-
-
-    <!-- ratings -->
-    <div class="border-t-gray-200 border-t-2">
-        <details class="">
-            <summary
-                class="bg-inherit cursor-pointer list-none mx-auto text-center"
-            >
-                <p
-                    class={ratings.length == 0
-                        ? "bg-gray-200 cursor-not-allowed"
-                        : ""}
-                >
-                    <span class="inline-block align-middle ">
-                        <Icon src={ChevronDown} class="grow-0 h-8" />
-                    </span>
-                    see ratings
-                </p>
-            </summary>
-
-            <div class="flex flex-col text-center bg-white ">
-                {#each ratings as rating}
-                    <div class="flex flex-row odd:bg-stone-50 ">
-                        <div class="basis-4/12">
-                            <p class="">{rating.name}</p>
-                        </div>
-                        <div class="basis-3/12">
-                            {rating.value}
-                        </div>
-                        <div class="basis-5/12 text-left">
-                            {formatDistance(rating.at, new Date(), {
-                                addSuffix: true,
-                            })}
-                        </div>
-                    </div>
-                {/each}
-            </div>
-        </details>
-    </div>
 </div>

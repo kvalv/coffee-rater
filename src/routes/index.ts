@@ -6,24 +6,17 @@ export type coffeeJoinRating = definitions["coffee"] &
 
 /** @type {import('./__types/index').RequestHandler} */
 export async function get() {
-    let x = await db.from("coffee").select(`
-        name,
-        id,
-        producer,
-        image,
-        date,
-        rating (
-            *,
-            profile (name)
-        )
-    `);
-    console.log(JSON.stringify(x));
+    let { error, data } = await db.rpc("fetch_cardinfo");
+    if (error) {
+        console.error("error data...", error);
+        return {
+            status: 400,
+            body: { message: error.message },
 
-    if (x.error != null) {
-        console.log("unable to query data; ", x);
+        }
     }
-    let coffees: coffeeJoinRating[] = x.data;
+
     return {
-        body: { coffees: coffees },
+        body: { coffees: data },
     };
 }
