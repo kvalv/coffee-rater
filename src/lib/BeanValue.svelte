@@ -6,12 +6,11 @@
     let fill_fn = (i) => {
         if ((value % 1 > 0) && (Math.ceil(value) == i+1)) {
             return `fill-[url(#grad)]`
-            // return "fill-[url(#grad)]";
         }
         if (i + 1 < value) {
             return "fill-c1"
         } else if ( i+1 == value) {
-            return "fill-c2";
+            return "fill-c1";
         } else {
             return "fill-gray-300"
         }

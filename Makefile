@@ -25,3 +25,6 @@ src/types.ts:
 pg-cli:
 	# \d for tables, 
 	docker exec -it coffee-rater-postgres psql -U postgres
+
+fmt:
+	prettier -w --tab-width 4 src

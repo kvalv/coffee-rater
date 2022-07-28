@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
+    import { goto, invalidate } from "$app/navigation";
 
     import { page } from "$app/stores";
 
@@ -10,7 +10,7 @@
     import { capitalize } from "$lib/utils";
     import { Trash } from "@steeze-ui/heroicons";
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { formatDistance } from "date-fns";
+    import { formatDistance, format, addMinutes, parseISO } from "date-fns";
 
     export let error;
     if (error) {
@@ -27,11 +27,13 @@
         rating: number;
         profile: { id: string; name: string };
         description: string;
+        date: string;
     }[];
 
-    function format(r) {
+    function dformat(r) {
+        let a = (a) => addMinutes(a, a.getTimezoneOffset()); // hack to get proper time diff
         if (r.date != null) {
-            return formatDistance(new Date(r.date), new Date(), {
+            return formatDistance(new Date(r.date), a(new Date()), {
                 addSuffix: true,
             });
         } else {
@@ -57,7 +59,7 @@
             .from("rating")
             .delete()
             .match({ coffee_id: $page.params.id, profile_id: $user?.id });
-        console.log("oing to url");
+        invalidate(`/coffees/${$page.params.id}`);
         goto(`/coffees/${$page.params.id}`);
         if (res.error) {
             notify(res.error.message, "danger");
@@ -96,13 +98,13 @@
     </button>
 
     <div class="flex flex-col gap-1 px-2 border border-c2 w-[100%]">
-        {#each rating as r}
+        {#each rating.sort((a, b) => new Date(b.date) - new Date(a.date)) as r}
             <div class="flex flex-row justify-between">
                 <div class="flex flex-col gap-1 my-2">
                     <div>
                         <span class="font-bold"
                             >{capitalize(r.profile.name) || "no name"}</span
-                        ><span>, {format(r)}</span>
+                        ><span>, {dformat(r)}</span>
                     </div>
                     {#if r.description}
                         <p class="">{r.description}</p>
