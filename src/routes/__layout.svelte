@@ -5,6 +5,7 @@
     import { SvelteToast } from "@zerodevx/svelte-toast";
     import { Icon } from "@steeze-ui/svelte-icon";
     import { Logout } from "@steeze-ui/heroicons";
+    import capitalize from "underscore.string/capitalize";
 
     $user = supabase.auth.user();
     let sub = supabase.auth.onAuthStateChange(async (x, session) => {
@@ -18,9 +19,9 @@
             console.log("got error when trying to fetch profile data", error);
         } else {
             if (Array.isArray(data)) {
-                $name = data[0].name;
+                $name = capitalize(data[0].name);
             } else {
-                $name = data.name;
+                $name = capitalize(data.name);
             }
         }
     }).data;
@@ -44,7 +45,7 @@
             </form>
         {:else}
             <div class="flex gap-1">
-                <div>{$name}</div>
+                <div>{$name || "unknown user"}</div>
                 <div on:click={signout}>
                     <Icon src={Logout} class="text-gray-400 h-6" />
                 </div>

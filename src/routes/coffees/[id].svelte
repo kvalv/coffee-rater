@@ -10,6 +10,7 @@
     import { Trash } from "@steeze-ui/heroicons";
     import { Icon } from "@steeze-ui/svelte-icon";
     import { formatDistance } from "date-fns";
+    import { capitalize } from "underscore.string";
 
     export let error;
     if (error) {
@@ -98,7 +99,7 @@
                 <div class="flex flex-col gap-1 my-2">
                     <div>
                         <span class="font-bold"
-                            >{r.profile.name || "no name"}</span
+                            >{capitalize(r.profile.name) || "no name"}</span
                         ><span>, {format(r)}</span>
                     </div>
                     {#if r.description}
