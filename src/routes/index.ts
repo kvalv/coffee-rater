@@ -12,8 +12,7 @@ export async function get() {
         return {
             status: 400,
             body: { message: error.message },
-
-        }
+        };
     }
 
     return {

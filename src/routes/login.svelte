@@ -3,6 +3,8 @@
 
     import supabase from "$lib/db";
     import { notify } from "$lib/notify";
+    import { InformationCircle } from "@steeze-ui/heroicons";
+    import { Icon } from "@steeze-ui/svelte-icon";
 
     let email: string;
     let name: string;
@@ -58,7 +60,7 @@
                     register = false;
                 }
             }}
-            class="bg-gray-200 border border-gray-500 w-[100%]"
+            class="cursor-pointer bg-gray-200 border border-gray-500 w-[100%]"
         >
             Log in
         </div>
@@ -68,55 +70,79 @@
                     register = true;
                 }
             }}
-            class="bg-gray-200 border border-gray-500 w-[100%]"
+            class="cursor-pointer bg-gray-200 border border-gray-500 w-[100%]"
         >
             Register
         </div>
     </div>
 
     <form class="flex flex-col gap-4 ">
-        <label name="email" class="flex flex-row flex-wrap justify-start gap-x-4 px-8">
+        <label
+            name="email"
+            class="flex flex-row flex-wrap justify-start gap-x-4 px-8"
+        >
+            <p>Email address</p>
             <input
                 bind:value={email}
                 type="email"
                 autocomplete="username"
-                class="placeholder:text-gray-500 bg-white px-2 border border-black rounded-sm"
+                class="placeholder:text-gray-500 bg-white px-2 border border-black w-full rounded-sm"
                 placeholder="example@email.com"
             />
-            <p>e-mail</p>
         </label>
 
         {#if register}
-            <label name="name" class="flex flex-row flex-wrap justify-start gap-x-4 px-8">
+            <label
+                name="name"
+                class="flex flex-row flex-wrap justify-start gap-x-4 px-8"
+            >
+                <p>Display name</p>
                 <input
                     bind:value={name}
                     type="text"
-                    class="placeholder:text-gray-500 border px-2 border-black bg-white rounded-sm"
+                    class="placeholder:text-gray-500 border px-2 border-black bg-white w-full rounded-sm"
                     placeholder="Ola Nordmann"
                 />
-                <p>display name</p>
             </label>
         {/if}
 
         <label
             name="password"
-            class="flex flex-row flex-wrap justify-start gap-x-4 px-8"
+            class="flex flex-row flex-wrap justify-start gap-x-4 px-8 w-full"
         >
+            <div class="flex w-full justify-between">
+                <p>Password</p>
+                {#if !register}
+                    <a
+                        class="text-blue-400 visited:text-purple-600"
+                        href="/reset">forgot password?</a
+                    >
+                {/if}
+            </div>
             <input
                 bind:value={password}
                 type="password"
                 autocomplete={register ? "new-password" : "current-password"}
-                class="placeholder:text-gray-500 border px-2 border-black bg-white rounded-sm"
+                class="placeholder:text-gray-500 border px-2 border-black bg-white w-full rounded-sm"
                 placeholder="password..."
             />
-            <p>password (optional)</p>
         </label>
+
         <input
             {disabled}
             on:click|preventDefault={submit}
             type="submit"
             value={register ? "register" : "log in"}
-            class="disabled:bg-gray-500 text-white font-bold h-[2rem] bg-c2"
+            class="cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-500 text-white font-bold h-[2rem] bg-c2"
         />
     </form>
+    <div class="inline-flex gap-x-4 items-center self-start justify-center">
+        <Icon src={InformationCircle} class="w-4 text-blue-500" />
+        <p>
+            User management and passwords are handled by <a
+                class="text-blue-400 visited:text-purple-600"
+                href="https://supabase.com/">supabase</a
+            >.
+        </p>
+    </div>
 </div>

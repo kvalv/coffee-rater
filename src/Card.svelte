@@ -8,38 +8,9 @@
     let defaultImage =
         "https://picmamba.com/wp-content/uploads/2017/12/black-white-coffee.jpg";
 
-    $: imgName = (() => {
-        if (media == null) {
-            return defaultImage;
-        }
-        if (media.endsWith(".blob")) {
-            if (media.startsWith("images/")) {
-                // for some reason, it adds images to the url which gives a 404...
-                media = media.replace(/^images/, "");
-            }
-            let r = supabase.storage.from("images").getPublicUrl(media);
-            if (r.error != null) {
-                console.error(r.error);
-                return defaultImage;
-            }
-            console.log(media, "blob!", r.data.publicURL);
-            // return "https://nkcfpjmzqpbdlmseyilr.supabase.co/storage/v1/object/public/images/public/d92fb7d7-ba57-434a-8f1a-ad948062aab6.blob"
-            return r.data.publicURL;
-        }
-        return media;
-    })();
-
-    import supabase from "$lib/db";
-
     interface Badge {
         text: string;
     }
-
-    interface Action {
-        text: string;
-        onClick: () => void;
-    }
-
 </script>
 
 <!-- card container -->
@@ -60,7 +31,7 @@
             <img
                 class="h-48 w-full object-cover bg-cover "
                 alt="aaa"
-                src={imgName}
+                src={media || defaultImage}
             />
         </div>
     </a>

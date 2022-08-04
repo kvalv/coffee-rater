@@ -7,3 +7,12 @@ export function capitalize(s: string) {
         .value();
     // _.chain(s).
 }
+
+export function getHashParameters(hash_string: string) {
+    let result = hash_string.split("&").reduce(function (result, item) {
+        let parts = item.split("=");
+        result[parts[0]] = parts[1];
+        return result;
+    }, {});
+    return result;
+}

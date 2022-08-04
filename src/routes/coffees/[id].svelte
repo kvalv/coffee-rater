@@ -68,7 +68,7 @@
         }
     }
 
-    $: disabled = rating.some((r) => r.profile.id == $user?.id);
+    $: disabled = ($user == null) || rating.some((r) => r.profile.id == $user?.id);
 </script>
 
 <div class="flex flex-col gap-4 bg-white justify-center mx-4 rounded-sm my-8">
@@ -94,7 +94,7 @@
             location.href = `${$page.params.id}-rate`;
         }}
     >
-        {disabled ? "Already checked in" : "Check-In"}
+        {disabled ? ($user == null ? "You need to be logged in to rate" : "Already checked in") : "Check-In"}
     </button>
 
     <div class="flex flex-col gap-1 px-2 border border-c2 w-[100%]">

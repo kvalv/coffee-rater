@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import { goto } from "$app/navigation";
 import { notify } from "$lib/notify";
 
@@ -21,8 +20,8 @@ const supabase = createClient(project_url, supabase_anon_key);
 export default supabase;
 
 export function getPublicUrlForBlob(p: string | null) {
-    if (p == null) {
-        return;
+    if (p == null || p == undefined) {
+        return undefined;
     }
 
     if (p.endsWith(".blob")) {
