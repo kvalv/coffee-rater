@@ -2,7 +2,6 @@
 
 import supabase from "$lib/db";
 import { notify } from "$lib/notify";
-import { resetPasswordEmail } from "$lib/stores";
 
 </script>
 <form
@@ -20,7 +19,6 @@ import { resetPasswordEmail } from "$lib/stores";
             notify(`Unable to reset password. ${r.error.message}`, "danger")
             return
         }
-        $resetPasswordEmail = email
 
         notify("Check your e-mail for a password reset link.", "success")
     }}

@@ -2,7 +2,6 @@
     import { page } from "$app/stores";
     import supabase from "$lib/db";
     import { notify } from "$lib/notify";
-import { resetPasswordEmail } from "$lib/stores";
 
     let access_token = $page.params.access_token;
     let password: string;
@@ -18,13 +17,11 @@ import { resetPasswordEmail } from "$lib/stores";
     $: disabled = !password;
 </script>
 
-email is ... {$resetPasswordEmail}
 
 
 <form class="pt-4 bg-white" on:submit|preventDefault={submit}>
     <input
         hidden
-        value={$resetPasswordEmail}
         type="email"
         autocomplete="username"
         class="placeholder:text-gray-500 bg-white px-2 border border-black w-full rounded-sm"
