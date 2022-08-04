@@ -82,7 +82,7 @@
                 class="self-center mr-2"
                 on:click={async () => await delete_coffee()}
             >
-                <Icon src={Trash} class="h-8 text-gray-400" />
+                <Icon src={Trash} class="cursor-pointer h-8 text-gray-400" />
             </div>
         {/if}
     </div>
@@ -117,7 +117,7 @@
                         id="remove"
                         class="self-center"
                     >
-                        <Icon src={Trash} class="h-8 text-gray-400" />
+                        <Icon src={Trash} class="cursor-pointer h-8 text-gray-400" />
                     </div>
                 {/if}
             </div>

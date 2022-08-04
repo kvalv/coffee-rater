@@ -33,7 +33,7 @@
     <nav
         class="bg-c1 px-2 h-12 flex text-white flex-row flex-none flex-nowrap justify-between items-center"
     >
-        <a href="/">Bula Coffee Rater Club</a>
+        <a class="font-bold tracking-wider" href="/">Bula Coffee Rater Club</a>
 
         {#if !$user}
             <form method="get" action="/login">
@@ -53,7 +53,7 @@
         {/if}
     </nav>
 
-    <div class="">
+    <div class="w-full lg:mx-auto lg:max-w-lg ">
         <slot />
     </div>
     <!-- </Notifications> -->
