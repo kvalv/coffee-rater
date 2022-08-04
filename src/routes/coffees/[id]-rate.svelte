@@ -2,25 +2,17 @@
     import supabase from "$lib/db";
     import { Icon } from "@steeze-ui/svelte-icon";
     import { Camera } from "@steeze-ui/heroicons";
-    import { getPublicUrlForBlob } from "$lib/db";
-    import CameraComp from "$lib/Camera.svelte";
-    import Modal from "$lib/Modal.svelte";
-    import { v4 as uuidv4 } from "uuid";
     import { page } from "$app/stores";
     import { notify } from "$lib/notify";
-import { goto } from "$app/navigation";
+    import { goto } from "$app/navigation";
+    import CameraCapture from "$lib/CameraCapture.svelte";
 
     export let name: string;
-    export let id: string;
     export let producer: string;
     export let image: string;
-    export let date: string;
 
-    let uploadURL: string | undefined;
-    let c: CameraComp;
-    let modal: Modal;
-
-    $: console.log("uploadURL = ", uploadURL);
+    let upload_image: string | undefined;
+    let cap: CameraCapture;
 
     let default_img =
         "https://picmamba.com/wp-content/uploads/2017/12/black-white-coffee.jpg";
@@ -30,31 +22,33 @@ import { goto } from "$app/navigation";
     let description: string;
 
     async function submit() {
-        let { data, error } = await supabase.from("rating").insert([
+        let { error } = await supabase.from("rating").insert([
             {
                 rating: rating_value,
                 description,
                 coffee_id: $page.params.id,
                 profile_id: supabase.auth.user()?.id,
+                image: upload_image,
             },
         ]);
         if (error) {
             notify(error.message, "danger");
             return;
         }
-        goto(`/coffees/${$page.params.id}`)
-        notify("added rating :-)", "success")
-        // console.log(data);
+        goto(`/coffees/${$page.params.id}`);
+        notify("added rating", "success");
     }
 </script>
 
 <div class="flex flex-col p-4 bg-white mx-4  gap-y-4">
     <div class="flex flex-row gap-2">
-        <img
-            class="h-12 aspect-square self-center object-cover bg-cover "
-            alt=""
-            src={getPublicUrlForBlob(image) || default_img}
-        />
+        <a href={image}>
+            <img
+                class="h-12 rounded-md border aspect-square self-center object-cover bg-cover "
+                alt=""
+                src={image || default_img}
+            />
+        </a>
         <div class="flex flex-col">
             <p class="font-bold text-xl">{name}</p>
             <p class="font-thin text-lg text-gray-600">{producer}</p>
@@ -69,10 +63,7 @@ import { goto } from "$app/navigation";
         />
         <div
             class="p-2 flex grow-0 flex-col justify-self-end place-items-center rounded-lg border-2 border-gray-400"
-            on:click={async () => {
-                modal.open();
-                await c.open();
-            }}
+            on:click={cap.open}
         >
             <Icon src={Camera} class="w-8 " />
             <p class="text-xs">add photo</p>
@@ -107,25 +98,10 @@ import { goto } from "$app/navigation";
     </button>
 </div>
 
-<Modal bind:this={modal} closeOnClickOutside={true}>
-    <CameraComp
-        bind:this={c}
-        on:photoCaptured={async ({ detail: { blob } }) => {
-            modal.close();
-
-            let fname = `public/${uuidv4()}.blob`;
-            let r = await supabase.storage.from("images").upload(fname, blob);
-            if (r.error != null) {
-                console.error(r.error.message, r);
-                return;
-            }
-
-            uploadURL = r?.data?.Key;
-            if (uploadURL == undefined) {
-                console.error("expected image to be set, but it is not");
-                return;
-            }
-            uploadURL = getPublicUrlForBlob(uploadURL);
-        }}
-    />
-</Modal>
+<CameraCapture
+    bind:this={cap}
+    uploadOnCapture={true}
+    on:capture={(e) => {
+        upload_image = e.detail.url;
+    }}
+/>

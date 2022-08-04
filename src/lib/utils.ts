@@ -1,4 +1,5 @@
 import _ from "underscore";
+import { formatDistance, addMinutes } from "date-fns";
 
 export function capitalize(s: string) {
     return _.chain(s.split(" "))
@@ -15,4 +16,17 @@ export function getHashParameters(hash_string: string) {
         return result;
     }, {});
     return result;
+}
+
+export function formatDistanceNow(r: string | Date) {
+    if (!r) {
+        return "unknown date...";
+    }
+    let d = new Date(r);
+    let now = new Date();
+    // hack to get proper time diff
+    let now_timeoffset = addMinutes(now, now.getTimezoneOffset());
+    return formatDistance(d, now_timeoffset, {
+        addSuffix: true,
+    });
 }

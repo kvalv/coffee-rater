@@ -21,11 +21,12 @@ import { createEventDispatcher } from "svelte";
     let dispatch = createEventDispatcher()
 </script>
 
-<Modal close_hook={() => {console.log('hook!'); c.close()}} bind:this={modal} closeOnClickOutside={true}>
+<Modal close_hook={() => {c.close()}} bind:this={modal} closeOnClickOutside={true}>
     <CameraComp
         width="100vw"
         height="50vh"
         bind:this={c}
+        on:capturestart
         on:photoCaptured={async ({ detail: { blob } }) => {
             modal.close();
 

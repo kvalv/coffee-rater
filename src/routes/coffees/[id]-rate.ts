@@ -6,7 +6,7 @@ export async function get({ params }) {
     let res = await supabase
         .from("coffee")
         .select(
-            "name, producer, image, date, rating(rating, description, profile(name))"
+            "name, producer, image, rating(rating, description, profile(name))"
         )
         .eq("id", params.id);
     if (res.error != null) {

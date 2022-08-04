@@ -46,9 +46,9 @@
     export async function close() {
         // ms.stop()
         if (!ms) {
-            return
+            return;
         }
-        ms.getTracks().forEach(track => track.stop())
+        ms.getTracks().forEach((track) => track.stop());
         // track?.stop()
         ms = undefined; // unset mediastream
     }
@@ -88,6 +88,8 @@
                     y / 2
                 }px - (${captureButtonRadius}rem / 8))`}
                 on:click={async () => {
+                    dispatch("capturestart");
+
                     await capture();
                     await close();
                 }}
