@@ -11,8 +11,11 @@
     let name: string;
     let description: string;
 
+    let capturing: boolean = false;
     let cap: CameraCapture;
     let url: string | null = null;
+
+    $: disabled = producer == null || name == null || capturing;
 
     async function submit() {
         let r = await supabase
@@ -34,8 +37,12 @@
     <CameraCapture
         bind:this={cap}
         uploadOnCapture={true}
+        on:capturestart={() => {
+            capturing = true;
+        }}
         on:capture={(e) => {
             url = e.detail.url;
+            capturing = false;
         }}
     />
 </div>
@@ -48,15 +55,19 @@
     <form class="px-2 py-2">
         <p class="font-light text-gray-500">name</p>
         <input
+            required
             class="border border-c1 rounded-md"
             type="textnode"
+            placeholder="e.g. Dark Roast"
             bind:value={name}
         />
     </form>
     <form class="px-2 py-2">
         <p class="font-light text-gray-500">producer</p>
         <input
+            required
             class="border border-c1 ounded-md"
+            placeholder="e.g. Lofbergs"
             type="text"
             bind:value={producer}
         />
@@ -65,6 +76,7 @@
     <div class="px-2 py-2">
         <p class="font-light text-gray-500">description (optional)</p>
         <textarea
+            required
             form="form"
             name="description"
             bind:value={description}
@@ -86,6 +98,7 @@
     <input
         type="submit"
         value="create coffee"
-        class="mt-4 cursor-pointer bg-c2 text-white w-full py-2 font-bold rounded-sm "
+        class="mt-4 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-500 bg-c2 text-white w-full py-2 font-bold rounded-sm "
+        {disabled}
     />
 </form>
