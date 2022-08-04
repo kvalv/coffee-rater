@@ -15,7 +15,7 @@ import { notify } from "$lib/notify";
         }
         let r = await supabase.auth.api.resetPasswordForEmail(email)
         if (r.error) {
-            console.error(r.error.message)
+            console.error(r)
             notify(`Unable to reset password. ${r.error.message}`, "danger")
             return
         }

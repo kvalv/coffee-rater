@@ -23,7 +23,6 @@
         localStorage.setItem("a", JSON.stringify(result));
         goto(`/reset-${result.access_token}`);
     }
-
 </script>
 
 <svelte:head>

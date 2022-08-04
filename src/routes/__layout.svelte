@@ -8,9 +8,11 @@
     import { capitalize } from "$lib/utils";
 
     $user = supabase.auth.user();
-    let sub = supabase.auth.onAuthStateChange(async (x, session) => {
+    supabase.auth.onAuthStateChange(async (_, session) => {
         $user = session?.user || null;
-        if ($user == null) return;
+        if ($user == null) {
+            $name = null
+        };
         let { data, error } = await supabase
             .from("profile")
             .select("name")
