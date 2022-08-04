@@ -14,7 +14,8 @@
 </script>
 
 <!-- card container -->
-<div
+<a
+    href={`/coffees/${id}`}
     class="max-w-md transition flex flex-col rounded-xl shadow-lg bg-white relative overflow-hidden"
 >
     <!-- badge -->
@@ -25,16 +26,11 @@
     </div>
 
     <!-- image -->
-
-    <a href={`/coffees/${id}`}>
-        <div class="md:shrink-0">
-            <img
-                class="h-48 w-full object-cover bg-cover "
-                alt="aaa"
-                src={media || defaultImage}
-            />
-        </div>
-    </a>
+    <img
+        class="md:shrink-0 h-48 w-full object-cover bg-cover "
+        alt="aaa"
+        src={media || defaultImage}
+    />
 
     <!-- title / main content -->
     <div class="flex flex-row mx-2">
@@ -48,4 +44,4 @@
 
     <div class="w-[100%] border-gray-200 border" />
     <!-- horizontal ruler -->
-</div>
+</a>

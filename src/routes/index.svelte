@@ -1,6 +1,6 @@
 <script lang="ts">
     import { user } from "$lib/stores";
-    import Card from "../Card.svelte";
+    import Card from "$lib/Card.svelte";
     import { PlusCircle } from "@steeze-ui/heroicons";
     import { Icon } from "@steeze-ui/svelte-icon";
     import { page } from "$app/stores";
